@@ -6,6 +6,7 @@ jobs:
       - image: alpine:latest
     steps:
       - checkout
+      - run: apk add --update curl
       - run: |
           if curl -s --head "https://google.com"; then
             echo "It worked!";
