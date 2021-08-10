@@ -1,19 +1,24 @@
 version: 2.1
-
+commands:
+  destroy_environments:
+    steps:
+      - run: aws cloudformation delete-stack --stack-name prod-${CIRCLE_WORKFLOW_ID}
 jobs:
-  smoke_test:
+  create_infrastructure:
     docker:
-      - image: alpine:latest
+      - image: amazon/aws-cli
     steps:
       - checkout
-      - run: apk add --update curl
-      - run: |
-          if curl -s --head "https://google.com"; then
-            echo "It worked!";
-          else
-            echo "Nope!"; exit 1
-          fi
+      - run:
+          name: create stack
+          command: |
+            aws cloudformation deploy \
+              --template-file template.yml \
+              --stack-name prod-${CIRCLE_WORKFLOW_ID}
+      -run: return 1
+      -destroy_environments
+       when: on_fail
 workflows:
   my_workflow:
     jobs:
-      - smoke_test
+      - create_infrastructure
