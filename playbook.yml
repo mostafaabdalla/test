@@ -1,8 +1,0 @@
----
-- name: Hello World Webpage
-  hosts: all
-  user: ubuntu
-  become: true
-  roles:
-   - prepare
-   - apache

@@ -1,23 +1,18 @@
 version: 2.1
 
 jobs:
-  configure_infrastructure:
+  smoke_test:
     docker:
-      - image: python:3.7-alpine3.11
+      - image: alpine:latest
     steps:
       - checkout
-      - add_ssh_keys:
-          fingerprints:
-            - "32:cb:15:6a:18:9c:53:04:b4:6f:a6:30:af:13:b8:0d"
-      - run:
-          name: install dependencies
-          command: |
-            apk add --update ansible
-      - run:
-          name: configure server
-          command:
-            ansible-playbook -i inventory playbook.yml
+      - run: |
+          if curl -s --head "https://google.com"; then
+            echo "It worked!";
+          else
+            echo "Nope!"; exit 1
+          fi
 workflows:
   my_workflow:
     jobs:
-      - configure_infrastructure
+      - smoke_test
