@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  create_infra:
+  create_infrastructure:
     docker:
       - image: amazon/aws-cli
     steps:
@@ -15,4 +15,4 @@ jobs:
 workflows:
   my_workflow:
     jobs:
-      - create_infra
+      - create_infrastructure
