@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  configure_infrastructure:
+  configure_infra:
     docker:
       - image: python:3.7-alpine3.11
     steps:
@@ -20,4 +20,4 @@ jobs:
 workflows:
   my_workflow:
     jobs:
-      - configure_infrastructure
+      - configure_infra
