@@ -2,7 +2,7 @@
  - name: "install apache2"
    become: true
    apt:
-     name: ["appache2"]
+     name: ["apache2"]
      state: latest
      update_cache: yes
 
@@ -11,8 +11,3 @@
      src: index.html
      dest: /var/www/html/index.html
      backup: yes
-
- - name: "enable httpd"
-   shell: |
-     systemctl enable httpd
-     systemctl start httpd
