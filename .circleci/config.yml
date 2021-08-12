@@ -15,33 +15,33 @@ jobs:
   get_last_deployment_id:
     docker:
       - image: amazon/aws-cli
-      steps:
-        - checkout
-        - run:
-          aws cloudformation \
-          list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
-          --no-paginate --output text
-        - persist_to_workspace:
-            root: ~/
-            paths:
-              - text.txt
+    steps:
+      - checkout
+      - run:
+        aws cloudformation \
+        list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
+        --no-paginate --output text
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - text.txt
   promote_to_production:
     docker:
       - image: amazon/aws-cli
-      steps:
-        - run:
-          aws cloudformation deploy \
-          --template-file cloudfront.yml \
-          --stack-name production-distro \
-          --parameter-overrides PipelineID="${CIRCLE_WORKFLOW_ID}"
+    steps:
+      - run:
+        aws cloudformation deploy \
+        --template-file cloudfront.yml \
+        --stack-name production-distro \
+        --parameter-overrides PipelineID="${CIRCLE_WORKFLOW_ID}"
   clean_up_old_front_end:
     docker:
       - image: amazon/aws-cli
-      steps:
-        - attach_workspace:
-            at: ~/
-        - run: aws s3 rm "s3://${OldPipelineID}" --recursive
-        - run: aws cloudformation delete-stack --stack-name "${PreviousPipelineID}"
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run: aws s3 rm "s3://${OldPipelineID}" --recursive
+      - run: aws cloudformation delete-stack --stack-name "${PreviousPipelineID}"
 workflows:
   my_workflow:
     jobs:
