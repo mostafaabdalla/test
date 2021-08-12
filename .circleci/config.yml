@@ -18,9 +18,9 @@ jobs:
     steps:
       - checkout
       - run:
-        aws cloudformation \
-        list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
-        --no-paginate --output text
+          aws cloudformation \
+          list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
+          --no-paginate --output text
       - persist_to_workspace:
           root: ~/
           paths:
@@ -30,10 +30,10 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - run:
-        aws cloudformation deploy \
-        --template-file cloudfront.yml \
-        --stack-name production-distro \
-        --parameter-overrides PipelineID="${CIRCLE_WORKFLOW_ID}"
+          aws cloudformation deploy \
+          --template-file cloudfront.yml \
+          --stack-name production-distro \
+          --parameter-overrides PipelineID="${CIRCLE_WORKFLOW_ID}"
   clean_up_old_front_end:
     docker:
       - image: amazon/aws-cli
